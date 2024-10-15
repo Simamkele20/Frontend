@@ -1,0 +1,61 @@
+<app-header></app-header>
+<div *ngIf="loading" class="spinner-container">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+<div *ngIf="!loading">
+  <div *ngIf="game">
+    <h3 class="GameName">{{ game.name }}</h3>
+  </div>
+  <div class="game-container" *ngIf="game">
+    <div class="game-item">
+      <div class="game-image">
+        <img
+          [src]="
+            game.cover
+              ? 'https:' + game.cover.url.replace('thumb', '1080p')
+              : 'https://i.ibb.co/Xx8MWN1/placeholder-264x374.png'
+          "
+          alt="{{ game.name }} cover"
+          style="width: 300px; height: 300px"
+        />
+      </div>
+
+      <div class="game-info">
+        <h4>Release Dates:</h4>
+        <ul>
+          <li *ngFor="let releaseDate of getRealeaseDates(game)">
+            {{ releaseDate }}
+          </li>
+        </ul>
+
+        <h4>Game Modes:</h4>
+        <ul>
+          <li *ngFor="let gameMode of getGameModes(game)">{{ gameMode }}</li>
+        </ul>
+
+        <h4>Genres:</h4>
+        <ul>
+          <li *ngFor="let gameGenre of getGenres(game)">{{ gameGenre }}</li>
+        </ul>
+
+        <h4>Platforms:</h4>
+        <ul>
+          <li *ngFor="let gamePlatfrom of getPlatforms(game)">
+            {{ gamePlatfrom }}
+          </li>
+        </ul>
+
+        <h4>Websites:</h4>
+        <ul>
+          <li *ngFor="let website of game.websites" class="website-link">
+            <a [href]="website.url">{{ website.url }} </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button class="back" (click)="goBack()">Go Back</button>
+  </div>
+</div>

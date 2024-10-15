@@ -1,0 +1,106 @@
+<app-header (searchTermChange)="onSearchTermChange($event)"></app-header>
+<div class="home-container">
+  <h5>Welcome to IGDB GAME EXPLORER  </h5>
+  <div *ngIf="loading" class="spinner-container">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+  <div *ngIf="!loading">
+    <div class="toggle-container">
+      <mat-button-toggle-group
+        name="genres"
+        (change)="toggleGenre($event.value)"
+        aria-label="Select Genre"
+      >
+        <mat-button-toggle
+          *ngFor="let genre of uniqueGenres"
+          [value]="genre"
+          [checked]="selectedGenres.includes(genre)"
+        >
+          {{ genre }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <mat-button-toggle-group
+        name="platforms"
+        (change)="togglePlatform($event.value)"
+        aria-label="Select Platform"
+      >
+        <mat-button-toggle
+          *ngFor="let platform of uniquePlatforms"
+          [value]="platform"
+          [checked]="selectedPlatforms.includes(platform)"
+        >
+          {{ platform }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div
+      class="resetCon"
+      *ngIf="selectedGenres.length > 0 || selectedPlatforms.length > 0"
+    >
+      <button class="reset" mat-button (click)="resetSelections()">
+        Reset Filter
+      </button>
+    </div>
+    <div class="button-container">
+      <mat-button-toggle-group
+        [(value)]="sortOrder"
+        (change)="toggleSortOrder($event.value)"
+      >
+        <mat-button-toggle value="asc">A-Z</mat-button-toggle>
+        <mat-button-toggle value="desc">Z-A</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div *ngIf="filteredGames.length === 0" class="error">
+      <p>
+        No games found. Please try a different search term or adjust your
+        filters.
+      </p>
+    </div>
+
+    <ng-container *ngIf="filteredGames.length > 0">
+      <div class="game-list">
+        <ng-container *ngIf="filteredGames.length > 0">
+          <div class="game-list">
+            <mat-card
+              *ngFor="let game of filteredGames"
+              class="game-item"
+              style="width: 300px"
+            >
+              <a [routerLink]="['/games/', game.id]">
+                <img
+                  [src]="
+                    game.cover
+                      ? 'https:' + game.cover.url.replace('thumb', '1080p')
+                      : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAdlJREFUeF7t3EFuwkAQRFHm/sfzgRw5AgkFCHim62OPPsvE7vK8rhCRRdqyLOvFV1ygCR03/g0QmnEWGnIWWmhKAMrxPVpoSACKsdFCQwJQjI0WGhKAYmy00JAAFGOjhYYEoBgbLTQkAMXYaKEhASjGRgsNCUAxNlpoSACKsdFCQwJQjI0WGhKAYmy00JAAFGOjhYYEoBgbLTQkAMXY6DNDr+t6aa09HOHV16GzfjVmmkZvS9xezxY8Ilw1dxroEUzi3gj06FvE3/urWpWa+8miyqBHcf972NTs1NxnZymD/mSrPdekMFJzX53x8NCzLGdK6J7lpO8ROi18nS+00JAAFDPUaPo3N2QSiRmCrn6i1OJSc/ecvwS66pPbnge/vzYFWTm3BLoXqOq+SpDUAg8LfQa8PUU5FPRsuPeLiEIn4BIzN5DU3Bt2F3T6ofb8SJ7l2i7o2+ES4ImZRGPfLXwIOgk+29+nS6DfbdPv++/YsA7YaIhaaKEhASjGRgsNCUAxNlpoSACKsdFCQwJQjI0WGhKAYmy00JAAFGOjhYYEoBgbLTQkAMXYaKEhASjGRgsNCUAxNlpoSACKsdFCQwJQjI0WGhKAYmy00JAAFGOjhYYEoBgbDUH/AEvHqpof/kFZAAAAAElFTkSuQmCC'
+                  "
+                  alt="{{ game.name }} cover"
+                  style="width: 300px; height: 300px"
+                />
+                <mat-card-title>{{ game.name }}</mat-card-title>
+
+                <mat-card-content>
+                  <p>
+                    <span class="Headings">Genres:</span> {{ getGenres(game) }}
+                  </p>
+                  <p>
+                    <span class="Headings">Platforms:</span>
+                    {{ getPlatforms(game) }}
+                  </p>
+                  <p>
+                    <span class="Headings">Summary:</span>
+                    {{
+                      game.summary
+                        ? game.summary
+                        : "The game is not yet released"
+                    }}
+                  </p>
+                </mat-card-content>
+              </a>
+            </mat-card>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</div>

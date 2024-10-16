@@ -9,7 +9,7 @@ import { GameResponse } from '../shared/models/game';
   providedIn: 'root',
 })
 export class GameService {
-  private TIMEOUT_DURATION = 30000;
+  private TIMEOUT_DURATION = 60000;
   private apiUrl= `${environment.Games_URL}`;
   private searchUrl = `${environment.MultiQuery_URL}`;
 
